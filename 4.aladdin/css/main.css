@@ -1,0 +1,19 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+#start,
+#end {
+	display: none;
+}
+
+
+#game > .stats {
+	position: absolute;
+	left: 20px;
+	top: 20px;
+}
+
+
