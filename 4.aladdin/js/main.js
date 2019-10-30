@@ -9,29 +9,68 @@ let $start = document.querySelector('#start'),
 
 
 let G = 1;
-let bananas,
+let images = {},
+		width,
+		height,
+		canvas,
+		ctx,
+		bananas,
 		hp,
 		startTime,
 		name,
-		interval;
+		interval,
+		imageCounter = 0,
+		allImageCount = 2,
+		imageLoaded = false;
+
+
+let imgs = {
+	bg: 'media/bg/bg.png',
+	ground: 'media/clipart/194900.png',
+};
 
 
 
+load();
 
-init();
+function load() {
+	for (let i in imgs) {
+		let img = new Image();
+
+		img.onload = () => {
+			images[i] = img;
+			imageCounter++;
+
+			if (imageCounter === allImageCount) {
+				imageLoaded = true;
+				init();
+			}
+		};
+		img.src = imgs[i];
+	}
+}
+
+
+
 
 
 function init() {
 	bananas = 0;
-	hp = 5;
+	hp = 100;
 	startTime = new Date().getTime();
 	name = 'asd';
 	$tableName.innerText = name;
 
+	canvas = document.createElement('canvas');
+	width = canvas.width = window.innerWidth;
+	height = canvas.height = window.innerHeight;
+	ctx = canvas.getContext('2d');
+	document.body.appendChild(canvas);
+
 
 	updateTimer();
 	interval = setInterval(() => {
-		hp--;
+		// hp--;
 		updateTimer();
 		// addSnake();
 		
@@ -62,7 +101,8 @@ function update() {
 
 
 function draw() {
-	
+	ctx.drawImage(images.bg, 0, 0, width, images.bg.height,
+								0, 0, width, height);
 }
 
 
@@ -79,6 +119,11 @@ function die() {
 	$game.style.display = 'none';
 	$end.style.display = 'block';
 }
+
+
+
+
+
 
 
 
