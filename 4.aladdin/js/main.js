@@ -8,7 +8,7 @@ let $start = document.querySelector('#start'),
 
 
 
-let G = 1;
+const G = 1;
 let images = {},
 		width,
 		height,
@@ -18,37 +18,37 @@ let images = {},
 		hp,
 		startTime,
 		name,
-		interval,
-		imageCounter = 0,
-		allImageCount = 2,
-		imageLoaded = false;
-
-
-let imgs = {
-	bg: 'media/bg/bg.png',
-	ground: 'media/clipart/194900.png',
-};
+		interval;
 
 
 
 load();
 
-function load() {
-	for (let i in imgs) {
-		let img = new Image();
 
-		img.onload = () => {
-			images[i] = img;
-			imageCounter++;
+async function load() {
+	images.bg = await loadImage('media/bg/bg.png');
+	images.ground = await loadImage('media/clipart/194900.png');
+	// images.aladdin = await loadImage('...');
+	// images.aladdinRun = [];
+	// images.aladdinRun[0] = await loadImage('aladdinRun1.png');
+	// images.aladdinRun[1] = await loadImage('aladdinRun2.png');
+	// images.aladdinRun[2] = await loadImage('aladdinRun3.png');
+	// images.aladdinRun[3] = await loadImage('aladdinRun4.png');
+	// images.aladdinRun[4] = await loadImage('aladdinRun5.png');
 
-			if (imageCounter === allImageCount) {
-				imageLoaded = true;
-				init();
-			}
-		};
-		img.src = imgs[i];
-	}
+	init();
 }
+
+
+
+function loadImage(path) {
+	return new Promise(res => {
+		let img = new Image();
+		img.onload = res(img);
+		img.src = path;
+	});
+}
+
 
 
 
