@@ -8,17 +8,34 @@ let $start = document.querySelector('#start'),
 
 
 
-const G = 1;
+const G = 0.5;
 let images = {},
 		width,
 		height,
 		canvas,
 		ctx,
 		bananas,
-		hp,
 		startTime,
 		name,
-		interval;
+		interval,
+		player,
+		bgShift;
+
+let aladdinRun=[
+    {x: 3, w: 35},
+    {x: 35, w: 33},
+    {x: 68, w: 28},
+    {x: 93, w: 34},
+    {x: 127, w: 39},
+    {x: 166, w: 37},
+    {x: 203, w: 31},
+    {x: 234, w: 28},
+    {x: 262, w: 29},
+    {x: 291, w: 34},
+    {x: 325, w: 40},
+    {x: 365, w: 36}
+];
+
 
 
 
@@ -28,6 +45,8 @@ load();
 async function load() {
 	images.bg = await loadImage('media/bg/bg.png');
 	images.ground = await loadImage('media/clipart/194900.png');
+	images.playerIdle = await loadImage('img/aladdin1.png');
+	images.playerRun = await loadImage('img/aladdinRun.png');
 	// images.aladdin = await loadImage('...');
 	// images.aladdinRun = [];
 	// images.aladdinRun[0] = await loadImage('aladdinRun1.png');
@@ -36,7 +55,9 @@ async function load() {
 	// images.aladdinRun[3] = await loadImage('aladdinRun4.png');
 	// images.aladdinRun[4] = await loadImage('aladdinRun5.png');
 
-	init();
+	setTimeout(() => {
+		init();
+	}, 30);
 }
 
 
@@ -55,8 +76,8 @@ function loadImage(path) {
 
 
 function init() {
+	bgShift = 0;
 	bananas = 0;
-	hp = 100;
 	startTime = new Date().getTime();
 	name = 'asd';
 	$tableName.innerText = name;
@@ -65,16 +86,20 @@ function init() {
 	width = canvas.width = window.innerWidth;
 	height = canvas.height = window.innerHeight;
 	ctx = canvas.getContext('2d');
-	document.body.appendChild(canvas);
+	ctx.font = '20px sans-serif';
+	$game.append(canvas);
 
+	let pw = images.playerIdle.width,
+			ph = images.playerIdle.height;
+	player = new Player(0, height-ph, pw, ph, 6);
 
 	updateTimer();
 	interval = setInterval(() => {
-		// hp--;
+		player.hp--;
 		updateTimer();
 		// addSnake();
-		
-		if (hp < 0) {
+
+		if (player.hp < 0) {
 			clearInterval(interval);
 			die();
 		}
@@ -95,21 +120,22 @@ function loop() {
 
 
 function update() {
-	
+	player.update();
 }
 
 
 
 function draw() {
-	ctx.drawImage(images.bg, 0, 0, width, images.bg.height,
+	ctx.drawImage(images.bg, bgShift, 0, width, images.bg.height,
 								0, 0, width, height);
+	player.draw();
 }
 
 
 
 function updateTimer() {
 	$tableTime.innerText = Math.floor((new Date().getTime() - startTime) / 1000);
-	$tableHP.innerText = hp;
+	$tableHP.innerText = player.hp;
 }
 
 
@@ -120,6 +146,30 @@ function die() {
 	$end.style.display = 'block';
 }
 
+
+
+document.onkeydown = e => {
+	if (e.keyCode === 37 && player.keys[37] !== undefined)
+		player.keys[37] = true;
+
+	if (e.keyCode === 38 && player.keys[38] !== undefined)
+		player.keys[38] = true;
+
+	if (e.keyCode === 39 && player.keys[39] !== undefined)
+		player.keys[39] = true;
+};
+
+
+document.onkeyup = e => {
+	if (e.keyCode === 37 && player.keys[37] !== undefined)
+		player.keys[37] = false;
+
+	if (e.keyCode === 38 && player.keys[38] !== undefined)
+		player.keys[38] = false;
+
+	if (e.keyCode === 39 && player.keys[39] !== undefined)
+		player.keys[39] = false;
+};
 
 
 
