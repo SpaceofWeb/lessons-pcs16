@@ -19,7 +19,9 @@ let images = {},
 		name,
 		interval,
 		player,
-		bgShift;
+		bgShift,
+		snakes = [];
+
 
 let aladdinRun=[
     {x: 3, w: 35},
@@ -47,6 +49,7 @@ async function load() {
 	images.ground = await loadImage('media/clipart/194900.png');
 	images.playerIdle = await loadImage('img/aladdin1.png');
 	images.playerRun = await loadImage('img/aladdinRun.png');
+	images.snake = await loadImage('media/clipart/Snake_Jafar.png');
 	// images.aladdin = await loadImage('...');
 	// images.aladdinRun = [];
 	// images.aladdinRun[0] = await loadImage('aladdinRun1.png');
@@ -93,6 +96,11 @@ function init() {
 			ph = images.playerIdle.height;
 	player = new Player(0, height-ph, pw, ph, 6);
 
+
+	for (let i = 0; i < 4; i++) {
+		snakes.push(new Snake());
+	}
+
 	updateTimer();
 	interval = setInterval(() => {
 		player.hp--;
@@ -120,6 +128,8 @@ function loop() {
 
 
 function update() {
+	for (let s of snakes) s.update();
+
 	player.update();
 }
 
@@ -128,6 +138,9 @@ function update() {
 function draw() {
 	ctx.drawImage(images.bg, bgShift, 0, width, images.bg.height,
 								0, 0, width, height);
+
+	for (let s of snakes) s.draw();
+
 	player.draw();
 }
 
@@ -172,6 +185,16 @@ document.onkeyup = e => {
 };
 
 
+
+function randInt(min=0, max=10) {
+	return Math.floor(Math.random() * (max - min) + min);
+}
+
+
+
+function randFloat(min=0, max=10) {
+	return Math.random() * (max - min) + min;
+}
 
 
 
