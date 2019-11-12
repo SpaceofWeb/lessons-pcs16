@@ -25,7 +25,7 @@ class Snake {
 
 	checkCollide() {
 		let A = {
-			x: player.x,
+			x: player.x + bgShift,
 			y: player.y,
 			w: player.w,
 			h: player.h
@@ -46,8 +46,10 @@ class Snake {
 			) {
 
 			player.hp -= 30;
+			console.log('collided');
 		}
 	}
+
 
 
 	draw() {
