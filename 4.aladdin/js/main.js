@@ -20,10 +20,11 @@ let images = {},
 		interval,
 		player,
 		bgShift,
-		snakes = [];
+		snakes = [],
+		time;
 
 
-let aladdinRun=[
+let aladdinRun = [
     {x: 3, w: 35},
     {x: 35, w: 33},
     {x: 68, w: 28},
@@ -79,6 +80,7 @@ function loadImage(path) {
 
 
 function init() {
+	time = 0;
 	bgShift = 0;
 	bananas = 0;
 	startTime = new Date().getTime();
@@ -102,17 +104,6 @@ function init() {
 	}
 
 	updateTimer();
-	interval = setInterval(() => {
-		player.hp--;
-		updateTimer();
-		// addSnake();
-
-		if (player.hp < 0) {
-			clearInterval(interval);
-			die();
-		}
-	}, 1000);
-
 	loop();
 }
 
@@ -131,6 +122,29 @@ function update() {
 	for (let s of snakes) s.update();
 
 	player.update();
+
+	let t = new Date().getTime();
+	if (time <= t) {
+
+		for (let s of snakes) {
+			if (s.collided === true && s.hit !== true) {
+				player.hp -= 30;
+			} else {
+				s.hit = false;
+			}
+		}
+
+
+		player.hp--;
+
+		if (player.hp < 0) {
+			player.hp = 0;
+			// die();
+		}
+
+		updateTimer();
+		time = t + 1000;
+	}
 }
 
 

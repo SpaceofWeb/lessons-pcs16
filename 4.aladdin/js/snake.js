@@ -9,6 +9,8 @@ class Snake {
 		this.maxRight = this.x + 500;
 		this.vel = 3;
 		this.dir = randInt(0, 2) === 0 ? -1 : 1;
+		this.collided = false;
+		this.hit = false; // hit player in this second
 	}
 
 
@@ -38,6 +40,7 @@ class Snake {
 			h: this.h
 		};
 
+
 		if (
 				B.x + B.w >= A.x &&
 				A.x + A.w >= B.x &&
@@ -45,8 +48,13 @@ class Snake {
 				A.y + A.h >= B.y 
 			) {
 
-			player.hp -= 30;
-			console.log('collided');
+			if (!this.collided) {
+				this.collided = true;
+				this.hit = true;
+				player.hp -= 30;
+			}
+		} else {
+			this.collided = false;
 		}
 	}
 
