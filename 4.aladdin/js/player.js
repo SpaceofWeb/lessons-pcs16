@@ -7,6 +7,7 @@ class Player {
 		this.hp = 100;
 		this.velocity = {x: velocity, y: 0};
 		this.jumping = false;
+		this.climbed = false;
 		this.running = false;
 		this.frame = 0;
 		this.frames = 0;
@@ -60,7 +61,7 @@ class Player {
 
 		if (this.keys[38] && this.jumping === false) {
 			this.jumping = true;
-			this.velocity.y = -11;
+			this.velocity.y = -13;
 		}
 
 		this.velocity.y += G;

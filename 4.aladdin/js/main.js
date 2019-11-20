@@ -21,7 +21,8 @@ let images = {},
 		player,
 		bgShift,
 		snakes = [],
-		time;
+		time,
+		platforms = [];
 
 
 let aladdinRun = [
@@ -51,6 +52,7 @@ async function load() {
 	images.playerIdle = await loadImage('img/aladdin1.png');
 	images.playerRun = await loadImage('img/aladdinRun.png');
 	images.snake = await loadImage('media/clipart/Snake_Jafar.png');
+	images.platform = await loadImage('media/clipart/platform.png');
 	// images.aladdin = await loadImage('...');
 	// images.aladdinRun = [];
 	// images.aladdinRun[0] = await loadImage('aladdinRun1.png');
@@ -61,7 +63,7 @@ async function load() {
 
 	setTimeout(() => {
 		init();
-	}, 30);
+	}, 100);
 }
 
 
@@ -99,6 +101,10 @@ function init() {
 	player = new Player(0, height-ph, pw, ph, 6);
 
 
+	for (let i = 0; i < 10; i++) {
+		platforms.push(new Platform());
+	}
+
 	for (let i = 0; i < 4; i++) {
 		snakes.push(new Snake());
 	}
@@ -119,6 +125,7 @@ function loop() {
 
 
 function update() {
+	for (let p of platforms) p.update();
 	for (let s of snakes) s.update();
 
 	player.update();
@@ -153,6 +160,7 @@ function draw() {
 	ctx.drawImage(images.bg, bgShift, 0, width, images.bg.height,
 								0, 0, width, height);
 
+	for (let p of platforms) p.draw();
 	for (let s of snakes) s.draw();
 
 	player.draw();
