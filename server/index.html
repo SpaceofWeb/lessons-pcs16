@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+
+
+<div id="endTable"></div>
+
+<script>
+
+function send(data) {
+	data = {
+		name: 'asd',
+		score: 100,
+		time: 20
+	};
+
+
+	$.ajax({
+		url: 'localhost/server/server.php',
+		data: data,
+		type: 'POST',
+		dataType: 'json',
+		error: err => {
+			if (err) console.error(err);
+		},
+		success: data => {
+			console.log(data);
+			createTable(data);
+		}
+	});
+}
+
+
+let data = [
+	{
+		'name': 'asd',
+		'score': 50,
+		'time': 701,
+	},{
+		'name': 'asd',
+		'score': 50,
+		'time': 701,
+	},{
+		'name': 'asd',
+		'score': 50,
+		'time': 701,
+	}
+];
+
+
+
+function createTable(data) {
+	let html = `<table>
+			<tr>
+				<th>#</th>
+				<th>name</th>
+				<th>score</th>
+				<th>time</th>
+			</tr>`;
+
+	for (let i = 0; i < data.length; i++) {
+		html += `<tr>
+				<td>${i+1}</td>
+				<td>${data[i].name}</td>
+				<td>${data[i].score}</td>
+				<td>${data[i].time}</td>
+			</tr>`;
+	}
+
+	html += '</table>';
+
+	document.querySelector('#endTable').innerHTML = html;
+}
+
+
+createTable(data);
+
+
+</script>
+
+
+
+</body>
+</html>
