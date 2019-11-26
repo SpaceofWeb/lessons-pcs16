@@ -13,15 +13,9 @@
 <script>
 
 function send(data) {
-	data = {
-		name: 'asd',
-		score: 100,
-		time: 20
-	};
-
-
+	console.log(`sending`, data);
 	$.ajax({
-		url: 'localhost/server/server.php',
+		url: 'server.php',
 		data: data,
 		type: 'POST',
 		dataType: 'json',
@@ -30,7 +24,7 @@ function send(data) {
 		},
 		success: data => {
 			console.log(data);
-			createTable(data);
+			// createTable(data);
 		}
 	});
 }
@@ -78,7 +72,14 @@ function createTable(data) {
 }
 
 
-createTable(data);
+// createTable(data);
+
+
+send({
+	name: 'asd',
+	score: 100,
+	time: 20
+});
 
 
 </script>

@@ -1,33 +1,47 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 $db = new mysqli('localhost', 'root', 'root', 'game');
 
 if ($db->connect_errno) {
-	die(json_encode('[mgs: "error"]'));
+	die(json_encode(['err'=> $db->connect_error]));
 }
 
 
-$q = 'INSERT INTO players (name, score, time) 
-VALUES(' . $_POST['name'] . ', 
-			' . $_POST['score'] . ', 
-			' . $_POST['time'] . ')';
+// die(json_encode($_POST));
+
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$score = isset($_POST['score']) ? $_POST['score'] : '';
+$time = isset($_POST['time']) ? $_POST['time'] : '';
+
+$q = "INSERT INTO players (name, score, time) 
+			VALUES('{$name}', '{$score}', '{$time}')";
 
 $db->query($q);
 
-
-$q = 'SELECT * FROM players ORDER BY score LIMIT 10';
-
-$data = $db->query($q);
-
-$d = [];
-
-if ($data) {
-	while($row = $data->fetch_assoc())
-		array_push($d, $row);
+if ($db->error) {
+	die(json_encode(['insert error'=> $db->error, 'query'=> $q]));
 }
 
 
-die(json_encode($d));
+
+$q = 'SELECT * FROM players ORDER BY score LIMIT 10';
+$res = $db->query($q);
+
+$data = [];
+
+if ($res->num_rows > 0) {
+	while($row = $res->fetch_assoc())
+		$data[] = $row;
+		// array_push($d, $row);
+}
+
+
+die(json_encode($data));
 
 
 // [
